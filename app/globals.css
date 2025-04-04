@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 20, 20, 30;
+  --background-end-rgb: 10, 10, 20;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--background-start-rgb)),
+    rgb(var(--background-end-rgb))
+  );
+}
+
+/* Update the bg-pattern class to make the background brighter */
+.bg-pattern {
+  background-color: #1a1a2e;
+  background-image: url("/kia-logo.png");
+  background-repeat: repeat;
+  background-size: 100px;
+  background-blend-mode: soft-light;
+  opacity: 0.2; /* Slightly increase opacity for better visibility */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.7);
+  min-height: 100vh;
+}
+
+/* Add more rounded edges to containers */
+.chart-container {
+  @apply bg-gray-900 rounded-xl p-4 border border-transparent;
+  background-color: rgba(
+    17,
+    24,
+    39,
+    0.9
+  ); /* Explicit bg-gray-900 with 90% opacity */
+  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border-image: linear-gradient(to right, #333, #999, #333) 1;
+  border-radius: 16px; /* Increase border radius for softer curves */
+  overflow: hidden;
+}
+
+.chart-title {
+  @apply text-xl font-bold text-white mb-4 text-center;
+}
+
+.silver-gradient {
+  border-width: 1px;
+  border-style: solid;
+  border-image: linear-gradient(to right, #333, #999, #333) 1;
+}
+
+/* Add styles for the header logo */
+.header-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.header-logo img {
+  height: 40px;
+  width: auto;
+}
+
+/* Add softer button styles */
+.btn-soft {
+  @apply rounded-full transition-all duration-300 ease-in-out;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+}
+
+.btn-soft:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Tab styles */
+.tabs-container {
+  @apply mt-6;
+}
+
+.tabs-header {
+  @apply flex border-b border-gray-600 mb-4;
+}
+
+.tab {
+  @apply px-4 py-2 text-gray-400 cursor-pointer transition-all duration-200;
+}
+
+.tab:hover {
+  @apply text-white;
+}
+
+.tab.active {
+  @apply text-white border-b-2 border-blue-500 font-medium;
+}
+
+.tab-content {
+  @apply p-4;
+}
