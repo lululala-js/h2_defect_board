@@ -1,23 +1,31 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { Button } from "@/components/ui/button";
 
 interface DefectAreaChartProps {
   data: {
-    id: string
-    area: string
-    count: number
-    fullPath: string
-  }[]
+    id: string;
+    area: string;
+    count: number;
+    fullPath: string;
+  }[];
 }
 
 export default function DefectAreaChart({ data }: DefectAreaChartProps) {
-  const [detailLevel, setDetailLevel] = useState<"top" | "mid" | "full">("top")
+  const [detailLevel, setDetailLevel] = useState<"top" | "mid" | "full">("top");
 
   // Process data based on detail level
-  const processedData = processDataByDetailLevel(data, detailLevel)
+  const processedData = processDataByDetailLevel(data, detailLevel);
 
   return (
     <div className="w-full">
@@ -52,14 +60,23 @@ export default function DefectAreaChart({ data }: DefectAreaChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={processedData}
-            margin={{ top: 20, right: 30, left: 20, bottom: detailLevel === "full" ? 100 : 60 }}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: detailLevel === "full" ? 100 : 60,
+            }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#555" vertical={false} />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="#555"
+              vertical={false}
+            />
             <XAxis
               dataKey="displayName"
               tick={{
                 fill: "#fff",
-                angle: detailLevel === "full" ? -45 : 0,
+                //angle: detailLevel === "full" ? -45 : 0,
                 textAnchor: detailLevel === "full" ? "end" : "middle",
                 fontSize: 12,
                 dy: detailLevel === "full" ? 10 : 0,
@@ -91,12 +108,14 @@ export default function DefectAreaChart({ data }: DefectAreaChartProps) {
                       <p className="text-white font-medium">{`${payload[0].payload.displayName}`}</p>
                       <p className="text-white">{`불량 개수: ${payload[0].value}대`}</p>
                       {payload[0].payload.details && (
-                        <p className="text-gray-300 text-sm mt-1">{payload[0].payload.details}</p>
+                        <p className="text-gray-300 text-sm mt-1">
+                          {payload[0].payload.details}
+                        </p>
                       )}
                     </div>
-                  )
+                  );
                 }
-                return null
+                return null;
               }}
             />
             <Bar
@@ -109,66 +128,75 @@ export default function DefectAreaChart({ data }: DefectAreaChartProps) {
         </ResponsiveContainer>
       </div>
     </div>
-  )
+  );
 }
 
-function processDataByDetailLevel(data: any[], detailLevel: "top" | "mid" | "full") {
+function processDataByDetailLevel(
+  data: any[],
+  detailLevel: "top" | "mid" | "full"
+) {
   if (detailLevel === "top") {
     // Only show top-level categories (DR, FENDER, HD, etc.)
-    const topLevelData: Record<string, { count: number; details: string[] }> = {}
+    const topLevelData: Record<string, { count: number; details: string[] }> =
+      {};
 
     data.forEach((item) => {
-      const parts = item.area.split("_")
-      if (parts.length === 0) return
+      const parts = item.area.split("_");
+      if (parts.length === 0) return;
 
-      const topLevel = parts[0]
+      const topLevel = parts[0];
 
       if (!topLevelData[topLevel]) {
-        topLevelData[topLevel] = { count: 0, details: [] }
+        topLevelData[topLevel] = { count: 0, details: [] };
       }
 
-      topLevelData[topLevel].count += item.count
+      topLevelData[topLevel].count += item.count;
       if (parts.length > 1) {
-        topLevelData[topLevel].details.push(item.fullPath)
+        topLevelData[topLevel].details.push(item.fullPath);
       }
-    })
+    });
 
     return Object.entries(topLevelData)
       .map(([category, data]) => ({
         displayName: category,
         count: data.count,
-        details: `${Array.from(new Set(data.details)).length}개 하위 카테고리 포함`,
+        details: `${
+          Array.from(new Set(data.details)).length
+        }개 하위 카테고리 포함`,
       }))
-      .sort((a, b) => b.count - a.count) // Sort by count descending
+      .sort((a, b) => b.count - a.count); // Sort by count descending
   }
 
   if (detailLevel === "mid") {
     // Show mid-level categories (DR_FRT, DR_RR, etc.)
-    const midLevelData: Record<string, { count: number; details: string[] }> = {}
+    const midLevelData: Record<string, { count: number; details: string[] }> =
+      {};
 
     data.forEach((item) => {
-      const parts = item.area.split("_")
-      if (parts.length < 2) return
+      const parts = item.area.split("_");
+      if (parts.length < 2) return;
 
-      const midLevel = `${parts[0]}_${parts[1]}`
+      const midLevel = `${parts[0]}_${parts[1]}`;
 
       if (!midLevelData[midLevel]) {
-        midLevelData[midLevel] = { count: 0, details: [] }
+        midLevelData[midLevel] = { count: 0, details: [] };
       }
 
-      midLevelData[midLevel].count += item.count
+      midLevelData[midLevel].count += item.count;
       if (parts.length > 2) {
-        midLevelData[midLevel].details.push(item.fullPath)
+        midLevelData[midLevel].details.push(item.fullPath);
       }
-    })
+    });
 
     return Object.entries(midLevelData)
       .map(([category, data]) => ({
         displayName: category,
         count: data.count,
-        details: `${Array.from(new Set(data.details)).length}개 하위 카테고리 포함`,
+        details: `${
+          Array.from(new Set(data.details)).length
+        }개 하위 카테고리 포함`,
       }))
-      .sort((a, b) => b.count - a.count) // Sort by count descending
+      .sort((a, b) => b.count - a.count); // Sort by count descending
   }
 
   // Full detail - but limit to top 20 by count to prevent overcrowding
@@ -180,6 +208,5 @@ function processDataByDetailLevel(data: any[], detailLevel: "top" | "mid" | "ful
       ...item,
       displayName: item.area,
       details: item.fullPath,
-    }))
+    }));
 }
-

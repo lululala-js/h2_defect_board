@@ -56,7 +56,7 @@ export default function TimeChart({ data }: TimeChartProps) {
               dataKey="label"
               tick={{
                 fill: "#fff",
-                angle: viewMode === "hourly" ? 0 : -45,
+                //angle: viewMode === "hourly" ? 0 : -45,
                 textAnchor: viewMode === "hourly" ? "middle" : "end",
                 fontSize: 12,
                 dy: viewMode === "hourly" ? 0 : 10,
