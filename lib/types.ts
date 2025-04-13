@@ -7,8 +7,8 @@ export interface VehicleData {
   booth: string
   defectArea: string
   defectType: string
-  repaintStatus?: string
-  acceptanceStatus?: string
+  isRepainted: boolean
+  isAccepted: boolean
 }
 
 export interface FilterCriteria {
@@ -16,8 +16,8 @@ export interface FilterCriteria {
   endDate: string
   vehicleType: string
   color: string
-  repaintStatus: string
-  acceptanceStatus: string
+  isRepainted: boolean | null
+  isAccepted: boolean | null
 }
 
 export interface BoothData {
@@ -39,3 +39,13 @@ export interface DefectAreaData {
   fullPath: string
 }
 
+export interface ApiResponse {
+  success: boolean
+  data: {
+    inspectionData: VehicleData[]
+    filterOptions: {
+      vehicleTypes: string[]
+      colors: string[]
+    }
+  }
+}
